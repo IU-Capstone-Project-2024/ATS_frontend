@@ -1,0 +1,8 @@
+frontend/.vscode/
+frontend/node_mojdules/
+frontend/*
+
+# test db
+backend/db.sqlite
+
+venv/
