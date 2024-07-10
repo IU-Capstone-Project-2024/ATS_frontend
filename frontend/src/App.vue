@@ -1,7 +1,18 @@
-<template>
+<<template>
   <div id="app">
     <h1>Trade Statistics</h1>
+    <div v-if="stats">
+      <h2>Statistics</h2>
+      <ul>
+        <li>Total Buys: {{ stats.total_buys }}</li>
+        <li>Total Sells: {{ stats.total_sells }}</li>
+        <li>Average Buy Price: {{ stats.avg_buy_price.toFixed(2) }}</li>
+        <li>Average Sell Price: {{ stats.avg_sell_price.toFixed(2) }}</li>
+        <li>Total Profit: {{ stats.total_profit.toFixed(2) }}</li>
+      </ul>
+    </div>
     <div v-if="trades.length">
+      <h2>Trade Details</h2>
       <table>
         <tr>
           <th>ID</th>
@@ -13,7 +24,6 @@
         </tr>
         <tr v-for="trade in trades" :key="trade.id"
           :class="{ 'buy': trade.trade_type === 'Buy', 'sell': trade.trade_type === 'Sell' }">
-
           <td>{{ trade.id }}</td>
           <td>{{ trade.trade_type }}</td>
           <td>{{ trade.symbol }}</td>
@@ -29,57 +39,59 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-import { ref, onMounted } from 'vue';
+  <script>
+  import axios from 'axios';
+  import { ref, onMounted } from 'vue';
 
-export default {
-  setup() {
-    const trades = ref([]);
+  export default {
+    setup() {
+      const trades = ref([]);
+      const stats = ref(null);
 
-    onMounted(() => {
-      console.log('Mounted');
-      axios.get('http://localhost:5000/api/trades')
-        .then(response => {
-          console.log('API response:', response.data);
-          trades.value = response.data.map(trade => ({
-            id: trade[0],
-            trade_type: trade[1],
-            symbol: trade[2],
-            quantity: trade[3],
-            price: trade[4],
-            timestamp: trade[5]
-          }));
-        })
-        .catch(error => {
-          console.error("There was an error!", error);
-        });
+      onMounted(() => {
+        console.log('Mounted');
+        axios.get('http://localhost:5000/api/trades')
+          .then(response => {
+            console.log('Trades API response:', response.data);
+            trades.value = response.data;
+          })
+          .catch(error => {
+            console.error("There was an error!", error);
+          });
 
-    });
+        axios.get('http://localhost:5000/api/stats')
+          .then(response => {
+            console.log('Stats API response:', response.data);
+            stats.value = response.data;
+          })
+          .catch(error => {
+            console.error("There was an error!", error);
+          });
+      });
 
-    return { trades };
-  }
-};
+      return { trades, stats };
+    }
+  };
 </script>
 
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
+  <style scoped>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
 
-th,
-td {
-  padding: 8px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
 
-.buy {
-  background-color: lightgreen;
-}
+  .buy {
+    background-color: lightgreen;
+  }
 
-.sell {
-  background-color: tomato;
-}
+  .sell {
+    background-color: tomato;
+  }
 </style>
