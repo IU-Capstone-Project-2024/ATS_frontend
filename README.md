@@ -68,6 +68,11 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
    pnpm build
    ```
 
+## UX|UI concept design:
+
+[Figma design](https://www.figma.com/design/01rc3K1AUBfTan3Pw3I8eI/ATS-Mockup?node-id=0-1&t=jeEkN4vYGo8JbvXd-0)
+
+
 ## Project website and progress reports:
 
 [Innopolis University Summer course 2024 ATS capstone project](https://capstone.innopolis.university/docs/2024/ats/week1)
