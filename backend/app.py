@@ -59,5 +59,18 @@ def get_stats():
     return jsonify(stats)
 
 
+@app.route('/api/decisions', methods=['GET'])
+def get_decisions():
+    sample = {
+        "last_vote_time": "2024-07-13T12:34:56Z",
+        "ml1": "sell",
+        "ml2": "buy",
+        "algo": "hold",
+        "result": "sell"
+    }
+
+    return jsonify(sample)
+
+
 if __name__ == '__main__':
     app.run(debug=True)
