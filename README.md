@@ -68,16 +68,9 @@ See [Vite Configuration Reference](https://vitejs.dev/config/).
    pnpm build
    ```
 
-## Progress Report
+## Project website and progress reports:
 
-### Done:
-
-- Designed visual style (palette, fonts, icons)
-- Implemented interactive prototype in Figma: [ATS Mockup](https://www.figma.com/proto/01rc3K1AUBfTan3Pw3I8eI/ATS-Mockup?node-id=0-1&t=bK4O4j9u07d5CLlh-1)
-
-### To-Do:
-
-- Implement filters for the transaction history screen
+[Innopolis University Summer course 2024 ATS capstone project](https://capstone.innopolis.university/docs/2024/ats/week1)
 
 
 ## Issues and Support
