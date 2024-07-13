@@ -1,5 +1,5 @@
 <template>
-    <div v-if="stats">
+    <div class="trade-statistics" v-if="stats">
         <h2>Statistics</h2>
         <ul>
             <li>Total Buys: {{ stats.total_buys }}</li>
@@ -16,13 +16,13 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 export default {
+    name: 'TradeStatistics',
     setup() {
         const stats = ref(null);
 
         const fetchStats = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/stats');
-                console.log('Stats API response:', response.data);
                 stats.value = response.data;
             } catch (error) {
                 console.error("There was an error!", error);
@@ -39,5 +39,24 @@ export default {
 </script>
 
 <style scoped>
-/* Add any styles specific to TradeStatistics.vue */
+.trade-statistics {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.trade-statistics h2 {
+    color: #2c3e50;
+}
+
+.trade-statistics ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.trade-statistics li {
+    margin: 5px 0;
+}
 </style>

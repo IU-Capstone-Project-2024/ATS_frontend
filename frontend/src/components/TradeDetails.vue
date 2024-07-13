@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="trade-details">
         <div v-if="trades.length">
             <h2>Trade Details</h2>
             <table>
@@ -33,13 +33,13 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 export default {
+    name: 'TradeDetails',
     setup() {
         const trades = ref([]);
 
         const fetchTrades = async () => {
             try {
                 const response = await axios.get('http://localhost:5000/api/trades');
-                console.log('Trades API response:', response.data);
                 trades.value = response.data;
             } catch (error) {
                 console.error("There was an error!", error);
@@ -56,6 +56,18 @@ export default {
 </script>
 
 <style scoped>
+.trade-details {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.trade-details h2 {
+    color: #2c3e50;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

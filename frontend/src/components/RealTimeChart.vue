@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="chart-container">
         <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
     </div>
 </template>
@@ -80,8 +80,10 @@ export default {
 </script>
 
 <style scoped>
-div {
-    position: relative;
-    height: 400px;
+.chart-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 </style>
