@@ -17,15 +17,16 @@ def query_db(query, args=(), one=False):
 
 @app.route('/api/trades', methods=['GET'])
 def get_trades():
-    trades = query_db("SELECT * FROM trades")
+    trades = query_db("SELECT * FROM logs")
+    print(trades)
     trades_list = [
         {
             'id': trade[0],
             'trade_type': trade[1],
-            'symbol': trade[2],
-            'quantity': trade[3],
-            'price': trade[4],
-            'timestamp': trade[5]
+            'symbol': "BTCUSDT",
+            'quantity': trade[2],
+            'price': trade[3],
+            'timestamp': trade[4]
         } for trade in trades
     ]
     return jsonify(trades_list)
@@ -33,17 +34,19 @@ def get_trades():
 
 @app.route('/api/stats', methods=['GET'])
 def get_stats():
-    trades = query_db("SELECT * FROM trades")
+    trades = query_db("SELECT * FROM logs")
 
     # Filter trades into buys and sells
     buys = [trade for trade in trades if trade[1].lower() == 'buy']
     sells = [trade for trade in trades if trade[1].lower() == 'sell']
+    print(buys)
+    print(sells)
 
-    total_buys = sum(trade[3] for trade in buys)
-    total_sells = sum(trade[3] for trade in sells)
+    total_buys = sum(float(trade[2]) for trade in buys)
+    total_sells = sum(float(trade[2]) for trade in sells)
 
-    avg_buy_price = sum(trade[4] * trade[3] for trade in buys) / total_buys if total_buys else 0
-    avg_sell_price = sum(trade[4] * trade[3] for trade in sells) / total_sells if total_sells else 0
+    avg_buy_price = sum(float(trade[3]) * float(trade[2]) for trade in buys) / total_buys if total_buys else 0
+    avg_sell_price = sum(float(trade[3]) * float(trade[2]) for trade in sells) / total_sells if total_sells else 0
 
     # Calculate total profit as (sell price - average buy price) * quantity sold
     total_profit = total_sells * (avg_sell_price - avg_buy_price)
@@ -61,15 +64,25 @@ def get_stats():
 
 @app.route('/api/decisions', methods=['GET'])
 def get_decisions():
-    sample = {
-        "last_vote_time": "2024-07-13T12:34:56Z",
-        "ml1": "sell",
-        "ml2": "buy",
-        "algo": "hold",
-        "result": "sell"
-    }
+    decisions = query_db("SELECT model, action, timestamp FROM decisions")
 
-    return jsonify(sample)
+    # Mapping actions to numerical values
+    action_mapping = {"sell": -1, "hold": 0, "buy": 1}
+    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in decisions]
+    print(result)
+    return jsonify(result)
+
+
+@app.route('/api/decisions_front', methods=['GET'])
+def get_decisions():
+    decisions = query_db("SELECT model, action, timestamp FROM decisions")
+
+    # Mapping actions to numerical values
+    action_mapping = {"sell": -1, "hold": 0, "buy": 1}
+    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in decisions]
+    print(result)
+
+    return jsonify(result)
 
 
 if __name__ == '__main__':

@@ -4,9 +4,11 @@
     </div>
 </template>
 
-<script>
+
+<<script>
 import { ref, onMounted } from 'vue';
 import ApexCharts from 'vue3-apexcharts';
+import axios from 'axios';
 
 export default {
     name: 'RealTimeChart',
@@ -16,7 +18,7 @@ export default {
     setup() {
         const series = ref([{
             name: 'Real-time Data',
-            data: Array.from({ length: 100 }, () => Math.floor(Math.random() * 100))
+            data: []
         }]);
 
         const chartOptions = ref({
@@ -26,7 +28,7 @@ export default {
                     enabled: true,
                     easing: 'linear',
                     dynamicAnimation: {
-                        speed: 1
+                        speed: 1000
                     }
                 },
                 toolbar: {
@@ -50,25 +52,44 @@ export default {
                 size: 0
             },
             xaxis: {
-                type: 'numeric',
-                range: 10
+                type: 'datetime'
             },
             yaxis: {
-                max: 100
+                min: -1,
+                max: 1,
+                tickAmount: 2,
+                labels: {
+                    formatter: function (value) {
+                        const actionMapping = {
+                            '-1': 'Sell',
+                            '0': 'Hold',
+                            '1': 'Buy'
+                        };
+                        return actionMapping[value.toString()];
+                    }
+                }
             },
             legend: {
                 show: false
             }
         });
 
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/decisions');
+                const data = response.data.map(d => ({
+                    x: new Date(d.timestamp).getTime(),
+                    y: d.action
+                }));
+                series.value = [{ name: 'Real-time Data', data }];
+            } catch (error) {
+                console.error("There was an error fetching the data!", error);
+            }
+        };
+
         onMounted(() => {
-            setInterval(() => {
-                if (series.value[0].data.length >= 10) {
-                    series.value[0].data.shift();
-                }
-                const newData = Math.floor(Math.random() * 100);
-                series.value[0].data.push(newData);
-            }, 1000);
+            fetchData();
+            setInterval(fetchData, 10000); // Update data every 10 seconds
         });
 
         return {
@@ -79,11 +100,11 @@ export default {
 };
 </script>
 
-<style scoped>
-.chart-container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
+    <style scoped>
+    .chart-container {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 </style>
