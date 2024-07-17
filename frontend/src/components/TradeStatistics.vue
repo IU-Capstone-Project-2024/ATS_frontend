@@ -2,7 +2,7 @@
     <div class="trade-statistics" v-if="stats">
         <h2>Statistics</h2>
         <ul>
-            <li>Total Buys: {{ stats.total_buys }}</li>
+            <li><b>Total Buys:</b> {{ stats.total_buys }}</li>
             <li>Total Sells: {{ stats.total_sells }}</li>
             <li>Average Buy Price: {{ stats.avg_buy_price.toFixed(2) }}</li>
             <li>Average Sell Price: {{ stats.avg_sell_price.toFixed(2) }}</li>

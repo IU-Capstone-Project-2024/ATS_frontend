@@ -1,14 +1,27 @@
 <template>
     <div class="decision-display">
         <h2>Last Vote Time: {{ decision.last_vote_time }}</h2>
-        <ul>
-            <li>ML1: <span :class="decision.ml1">{{ decision.ml1 }}</span></li>
-            <li>ML2: <span :class="decision.ml2">{{ decision.ml2 }}</span></li>
-            <li>Algo: <span :class="decision.algo">{{ decision.algo }}</span></li>
-            <li>Result: <span :class="decision.result">{{ decision.result }}</span></li>
-        </ul>
+        <div class="decisions">
+            <div class="decision">
+                <span>ML1</span>
+                <button :class="decision.ml1">{{ decision.ml1 }}</button>
+            </div>
+            <div class="decision">
+                <span>ML2</span>
+                <button :class="decision.ml2">{{ decision.ml2 }}</button>
+            </div>
+            <div class="decision">
+                <span>Algo</span>
+                <button :class="decision.algo">{{ decision.algo }}</button>
+            </div>
+            <div class="decision">
+                <span>Result</span>
+                <button :class="decision.result">{{ decision.result }}</button>
+            </div>
+        </div>
     </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -39,6 +52,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .decision-display {
     background-color: #fff;
@@ -46,35 +60,62 @@ export default {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .decision-display h2 {
     color: #2c3e50;
+    margin-bottom: 20px;
 }
 
-.decision-display ul {
-    list-style-type: none;
-    padding: 0;
+.decisions {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
 }
 
-.decision-display li {
-    margin: 5px 0;
+.decision {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.decision span {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.decision button {
+    padding: 20px 40px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-width: 200px;
+    /* Ensure buttons have a minimum width */
 }
 
 .sell {
-    color: red;
-    font-weight: bold;
+    background-color: red;
 }
 
 .buy {
-    color: green;
-    font-weight: bold;
+    background-color: green;
 }
 
 .hold {
-    color: orange;
-    font-weight: bold;
+    background-color: orange;
+}
+
+.sell:hover,
+.buy:hover,
+.hold:hover {
+    opacity: 0.8;
 }
 </style>

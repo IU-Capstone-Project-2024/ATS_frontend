@@ -16,7 +16,7 @@ export default {
     setup() {
         const series = ref([{
             name: 'Real-time Data',
-            data: Array.from({ length: 10 }, () => Math.floor(Math.random() * 100))
+            data: Array.from({ length: 100 }, () => Math.floor(Math.random() * 100))
         }]);
 
         const chartOptions = ref({
