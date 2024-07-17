@@ -64,25 +64,40 @@ def get_stats():
 
 @app.route('/api/decisions', methods=['GET'])
 def get_decisions():
-    decisions = query_db("SELECT model, action, timestamp FROM decisions")
+    _decisions = query_db("SELECT model, action, timestamp FROM decisions")
 
     # Mapping actions to numerical values
     action_mapping = {"sell": -1, "hold": 0, "buy": 1}
-    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in decisions]
-    print(result)
+    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in _decisions]
     return jsonify(result)
 
 
-@app.route('/api/decisions_front', methods=['GET'])
-def get_decisions():
-    decisions = query_db("SELECT model, action, timestamp FROM decisions")
+@app.route('/api/get_latest_decision', methods=['GET'])
+def get_latest_decision():
+    decisions = query_db("SELECT model, action, timestamp FROM decisions ORDER BY timestamp DESC")
 
     # Mapping actions to numerical values
-    action_mapping = {"sell": -1, "hold": 0, "buy": 1}
-    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in decisions]
-    print(result)
+    action_mapping = {"sell": "sell", "hold": "hold", "buy": "buy"}
 
-    return jsonify(result)
+    # Initialize with the latest timestamp
+    if decisions:
+        latest_timestamp = decisions[0][2]
+        latest_decisions = {"last_vote_time": latest_timestamp, "ml1": "", "ml2": "", "algo": "", "result": ""}
+
+        for row in decisions:
+            if row[2] == latest_timestamp:
+                if row[0] == "Knife":
+                    latest_decisions["ml1"] = action_mapping[row[1].lower()]
+                elif row[0] == "Sparse":
+                    latest_decisions["ml2"] = action_mapping[row[1].lower()]
+                elif row[0] == "Algorithms":
+                    latest_decisions["algo"] = action_mapping[row[1].lower()]
+                # Assuming the result is determined by a predefined logic, here set it as the action of 'Knife' for example
+                latest_decisions["result"] = latest_decisions["ml1"]
+    else:
+        latest_decisions = {"last_vote_time": "", "ml1": "", "ml2": "", "algo": "", "result": ""}
+
+    return jsonify(latest_decisions)
 
 
 if __name__ == '__main__':

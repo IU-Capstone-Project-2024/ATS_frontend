@@ -22,7 +22,6 @@
     </div>
 </template>
 
-
 <script>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
@@ -30,11 +29,17 @@ import { ref, onMounted } from 'vue';
 export default {
     name: 'DecisionDisplay',
     setup() {
-        const decision = ref({});
+        const decision = ref({
+            last_vote_time: "",
+            ml1: "",
+            ml2: "",
+            algo: "",
+            result: ""
+        });
 
         const fetchDecision = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/api/decisions');
+                const response = await axios.get('http://localhost:5000/api/get_latest_decision');
                 decision.value = response.data;
             } catch (error) {
                 console.error("There was an error!", error);
@@ -51,7 +56,6 @@ export default {
     }
 };
 </script>
-
 
 <style scoped>
 .decision-display {
