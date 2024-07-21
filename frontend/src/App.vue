@@ -2,9 +2,10 @@
   <div id="app">
     <DecisionDisplay />
     <div class="charts-row">
-      <!-- TODO: different chart with different parameters? Can be divided in separate modules btw-->
       <RealTimeChart />
-      <RealTimeChart />
+    </div>
+    <div class="charts-row">
+      <BalanceChart />
     </div>
     <TradeStatistics />
     <TradeDetails />
@@ -16,13 +17,15 @@ import TradeStatistics from './components/TradeStatistics.vue';
 import TradeDetails from './components/TradeDetails.vue';
 import RealTimeChart from './components/RealTimeChart.vue';
 import DecisionDisplay from './components/DecisionDisplay.vue';
+import BalanceChart from './components/BalanceChart.vue';
 
 export default {
   components: {
     TradeStatistics,
     TradeDetails,
     RealTimeChart,
-    DecisionDisplay
+    DecisionDisplay,
+    BalanceChart
   }
 };
 </script>
