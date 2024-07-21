@@ -25,6 +25,7 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
+import { io } from 'socket.io-client';
 
 export default {
     name: 'DecisionDisplay',
@@ -48,6 +49,16 @@ export default {
 
         onMounted(() => {
             fetchDecision();
+            const socket = io('http://localhost:5000');
+            socket.on('connect', () => {
+                console.log('Connected to WebSocket server');
+            });
+            socket.on('update_decision', () => {
+                fetchDecision();
+            });
+            socket.on('disconnect', () => {
+                console.log('Disconnected from WebSocket server');
+            });
         });
 
         return {
@@ -102,7 +113,6 @@ export default {
     cursor: pointer;
     transition: background-color 0.3s ease;
     min-width: 200px;
-    /* Ensure buttons have a minimum width */
 }
 
 .sell {
