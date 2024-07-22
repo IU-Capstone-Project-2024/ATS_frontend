@@ -83,7 +83,7 @@ def get_latest_decision():
                     latest_decisions["ml2"] = action_mapping[row[1].lower()]
                 elif row[0] == "Algorithms":
                     latest_decisions["algo"] = action_mapping[row[1].lower()]
-                elif row[0] == "Results":
+                elif row[0] == "Result":
                     latest_decisions["result"] = action_mapping[row[1].lower()]
     else:
         latest_decisions = {"last_vote_time": "", "ml1": "", "ml2": "", "algo": "", "result": ""}
