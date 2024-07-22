@@ -48,6 +48,7 @@ export default {
 
         onMounted(() => {
             fetchTrades();
+            setInterval(fetchTrades, 1000)
         });
 
         return { trades };

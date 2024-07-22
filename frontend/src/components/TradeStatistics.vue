@@ -31,6 +31,7 @@ export default {
 
         onMounted(() => {
             fetchStats();
+            setInterval(fetchStats, 1000) // TODO: test update every second
         });
 
         return { stats };
