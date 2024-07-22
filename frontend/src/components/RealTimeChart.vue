@@ -105,6 +105,7 @@ export default {
 };
 </script>
 
+
 <style scoped>
 .chart-container {
     background-color: #fff;

@@ -2,11 +2,11 @@
     <div class="trade-statistics" v-if="stats">
         <h2>Statistics</h2>
         <ul>
-            <li><b>Total Buys:</b> {{ stats.total_buys }}</li>
-            <li>Total Sells: {{ stats.total_sells }}</li>
-            <li>Average Buy Price: {{ stats.avg_buy_price.toFixed(2) }}</li>
-            <li>Average Sell Price: {{ stats.avg_sell_price.toFixed(2) }}</li>
-            <li>Total Profit: {{ stats.total_profit.toFixed(2) }}</li>
+            <li>Total Buys: {{ stats.total_buys }} BTC</li>
+            <li>Total Sells: {{ stats.total_sells }} BTC</li>
+            <li>Average Buy Price: {{ stats.avg_buy_price.toFixed(2) }}$</li>
+            <li>Average Sell Price: {{ stats.avg_sell_price.toFixed(2) }}$</li>
+            <li>Total Profit: {{ stats.total_profit.toFixed(2) }}$</li>
         </ul>
     </div>
 </template>
@@ -46,6 +46,7 @@ export default {
     border-radius: 10px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    text-align: center;
 }
 
 .trade-statistics h2 {
