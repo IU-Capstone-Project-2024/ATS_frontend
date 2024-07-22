@@ -94,7 +94,7 @@ export default {
 
         onMounted(() => {
             fetchData();
-            setInterval(fetchData, 3000); // Update data every 15 seconds
+            setInterval(fetchData, 5000); // Update data every 15 seconds
         });
 
         return {

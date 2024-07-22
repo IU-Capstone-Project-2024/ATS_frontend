@@ -4,10 +4,14 @@ from flask_socketio import SocketIO
 import sqlite3
 import threading
 import time
+import requests
+
 
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+current_session_price = 0
 
 
 def query_db(query, args=(), one=False):
@@ -33,6 +37,16 @@ def get_trades():
         } for trade in trades
     ]
     return jsonify(trades_list)
+
+
+@app.route('/api/btc_price', methods=['GET'])
+def get_btc_price():
+    global current_session_price
+    if current_session_price == 0:
+        response = requests.get('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+        data = response.json()
+        current_session_price = float(data['bitcoin']['usd'])
+    return jsonify({'price': current_session_price})
 
 
 @app.route('/api/stats', methods=['GET'])
