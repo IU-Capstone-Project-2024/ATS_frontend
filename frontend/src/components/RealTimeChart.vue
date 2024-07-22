@@ -1,6 +1,6 @@
 <template>
     <div class="chart-container">
-        <apexchart type="line" height="350" :options="chartOptions" :series="series"></apexchart>
+        <apexchart type="scatter" height="350" :options="chartOptions" :series="series"></apexchart>
     </div>
 </template>
 
@@ -48,15 +48,10 @@ export default {
             dataLabels: {
                 enabled: false
             },
-            stroke: {
-                curve: 'smooth'
-            },
-            title: {
-                text: 'Real-time Line Chart',
-                align: 'left'
-            },
             markers: {
-                size: 0
+                size: 5, // Adjust the size of the dots as needed
+                shape: 'circle',
+                colors: ['#FF4560', '#00E396', '#008FFB'], // Customize marker colors
             },
             xaxis: {
                 type: 'datetime'
