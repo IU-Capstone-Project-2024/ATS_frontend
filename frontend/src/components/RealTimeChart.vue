@@ -15,18 +15,11 @@ export default {
         apexchart: ApexCharts,
     },
     setup() {
-        const MAX_POINTS = 800; // Limit the number of points displayed on the chart
+        const MAX_POINTS = 300; // Limit the number of points displayed on the chart
         const series = ref([{
             name: 'Real-time Data',
             data: []
         }]);
-
-        // Define weights for each model
-        const modelWeights = {
-            'Algorithms': 0.5,
-            'Knife': 1,
-            'Sparse': 1
-        };
 
         const chartOptions = ref({
             chart: {
@@ -35,7 +28,7 @@ export default {
                     enabled: true,
                     easing: 'linear',
                     dynamicAnimation: {
-                        speed: 1000
+                        speed: 1
                     }
                 },
                 toolbar: {
@@ -86,32 +79,11 @@ export default {
                 const response = await axios.get('http://localhost:5000/api/decisions');
                 const data = response.data;
 
-                // Aggregate data by timestamp and apply weights
-                const aggregatedData = {};
-                data.forEach(d => {
-                    const timestamp = new Date(d.timestamp).getTime();
-                    if (!aggregatedData[timestamp]) {
-                        aggregatedData[timestamp] = 0;
-                    }
-                    aggregatedData[timestamp] += modelWeights[d.model] * d.action;
-                });
-
-                // Convert aggregated data to the desired format
-                const newData = Object.keys(aggregatedData).map(timestamp => {
-                    const sum = aggregatedData[timestamp];
-                    let action;
-                    if (sum > 0) {
-                        action = 1; // Buy
-                    } else if (sum < 0) {
-                        action = -1; // Sell
-                    } else {
-                        action = 0; // Hold
-                    }
-                    return {
-                        x: parseInt(timestamp),
-                        y: action
-                    };
-                });
+                // Convert data to the desired format
+                const newData = data.map(d => ({
+                    x: new Date(d.timestamp).getTime(),
+                    y: d.action
+                }));
 
                 // Append new data to the series and limit the number of points
                 series.value[0].data = [...series.value[0].data, ...newData].slice(-MAX_POINTS);

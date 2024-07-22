@@ -62,8 +62,8 @@ def get_stats():
 
 @app.route('/api/decisions', methods=['GET'])
 def get_decisions():
-    _decisions = query_db("SELECT model, action, timestamp FROM decisions")
-    action_mapping = {"sell": 0, "hold": -1, "buy": 0}
+    _decisions = query_db("SELECT model, action, timestamp FROM decisions WHERE model='Result'")
+    action_mapping = {"sell": -1, "hold": 0, "buy": 1}
     result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in _decisions]
     return jsonify(result)
 
