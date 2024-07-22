@@ -98,8 +98,17 @@ def handle_disconnect():
 
 
 def notify_frontend():
-    socketio.emit('update_decision', {'data': 'update'})
+    while True:
+        socketio.emit('update_decision', {'data': 'update'})
+        time.sleep(3)  # Wait for 3 seconds before sending the next update
+
+
+def start_notification_thread():
+    notification_thread = threading.Thread(target=notify_frontend)
+    notification_thread.daemon = True  # Daemonize the thread so it automatically dies when the main thread exits
+    notification_thread.start()
 
 
 if __name__ == '__main__':
+    start_notification_thread()
     socketio.run(app, debug=True)
