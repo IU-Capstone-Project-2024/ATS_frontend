@@ -5,6 +5,7 @@ import sqlite3
 import threading
 import time
 import requests
+from datetime import datetime, timedelta
 
 
 app = Flask(__name__)
@@ -33,7 +34,7 @@ def get_trades():
             'symbol': "BTCUSDT",
             'quantity': trade[2],
             'price': trade[3],
-            'timestamp': trade[4]
+            'timestamp': (datetime.strptime(trade[4], '%Y-%m-%d %H:%M:%S') + timedelta(hours=3)).strftime('%Y-%m-%d %H:%M:%S')
         } for trade in trades
     ]
     return jsonify(trades_list)
@@ -78,7 +79,8 @@ def get_stats():
 def get_decisions():
     _decisions = query_db("SELECT model, action, timestamp FROM decisions WHERE model='Result'")
     action_mapping = {"sell": -1, "hold": 0, "buy": 1}
-    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": row[2]} for row in _decisions]
+    result = [{"model": row[0], "action": action_mapping[row[1].lower()], "timestamp": (datetime.strptime(
+        row[2], '%Y-%m-%d %H:%M:%S') + timedelta(hours=6)).strftime('%Y-%m-%d %H:%M:%S')} for row in _decisions]
     return jsonify(result)
 
 
@@ -101,16 +103,18 @@ def get_latest_decision():
                     latest_decisions["result"] = action_mapping[row[1].lower()]
     else:
         latest_decisions = {"last_vote_time": "", "ml1": "", "ml2": "", "algo": "", "result": ""}
+    latest_decisions["last_vote_time"] = (datetime.strptime(latest_timestamp, '%Y-%m-%d %H:%M:%S') +
+                                          timedelta(hours=3)).strftime('%Y-%m-%d %H:%M:%S')
     print(latest_decisions)
     return jsonify(latest_decisions)
 
 
-@socketio.on('connect')
+@ socketio.on('connect')
 def handle_connect():
     print('Client connected')
 
 
-@socketio.on('disconnect')
+@ socketio.on('disconnect')
 def handle_disconnect():
     print('Client disconnected')
 

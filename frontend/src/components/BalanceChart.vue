@@ -85,7 +85,9 @@ export default {
                 let balance = initialBalance;
                 let btcHoldings = 0;
                 const newData = trades.reduce((acc, trade) => {
-                    const timestamp = new Date(trade.timestamp).getTime();
+                    let timestamp = new Date(trade.timestamp).getTime();
+                    // add +3h to timestamp to match the timezone
+                    timestamp += 3 * 60 * 60 * 1000;
                     const quantity = parseFloat(trade.quantity);
                     const price = parseFloat(trade.price);
 
