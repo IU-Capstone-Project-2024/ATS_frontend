@@ -84,7 +84,7 @@ export default {
 
                 let balance = initialBalance;
                 let btcHoldings = 0;
-                const newData = trades.map(trade => {
+                const newData = trades.reduce((acc, trade) => {
                     const timestamp = new Date(trade.timestamp).getTime();
                     const quantity = parseFloat(trade.quantity);
                     const price = parseFloat(trade.price);
@@ -95,14 +95,16 @@ export default {
                     } else if (trade.trade_type.toLowerCase() === 'sell') {
                         btcHoldings -= quantity;
                         balance += quantity * price;
+
+                        const currentProfit = (balance + btcHoldings * btcPrice) - initialBalance;
+                        acc.push({
+                            x: timestamp,
+                            y: currentProfit
+                        });
                     }
 
-                    const currentProfit = (balance + btcHoldings * btcPrice) - initialBalance;
-                    return {
-                        x: timestamp,
-                        y: currentProfit
-                    };
-                });
+                    return acc;
+                }, []);
 
                 // Limit the number of points
                 series.value[0].data = newData.slice(-MAX_POINTS);
